@@ -6,35 +6,32 @@
 package servidorinstantegram;
 
 import java.awt.image.BufferedImage;
-import java.util.Date;
 
 /**
  *
  * @author labinfo11
  */
 public class Publicacao {
-    private BufferedImage imgPerfil;
-    private String nomeUsuario;
+    private Usuario usuario;
     private String mensagem;
     private BufferedImage foto;
-    private Date data;
+    private String data;
     private short curtidas;
 
-    public Publicacao(BufferedImage imgPerfil, String nomeUsuario, String mensagem, BufferedImage foto, Date data, short curtidas) {
-        this.imgPerfil = imgPerfil;
-        this.nomeUsuario = nomeUsuario;
+    public Publicacao(Usuario usuario, String mensagem, BufferedImage foto, String data) {
+        this.usuario = usuario;
         this.mensagem = mensagem;
         this.foto = foto;
         this.data = data;
-        this.curtidas = curtidas;
+        this.curtidas = 0;
     }
-
-    public BufferedImage getImgPerfil() {
-        return imgPerfil;
+    
+    public void curtir(){
+        curtidas++;
     }
-
-    public String getNomeUsuario() {
-        return nomeUsuario;
+    
+    public Usuario getUsuario() {
+        return usuario;
     }
 
     public String getMensagem() {
@@ -45,7 +42,7 @@ public class Publicacao {
         return foto;
     }
 
-    public Date getData() {
+    public String getData() {
         return data;
     }
 
@@ -53,5 +50,8 @@ public class Publicacao {
         return curtidas;
     }
     
+    public void setCurtidas(short curtidas){
+        this.curtidas = curtidas;
+    }
     
 }
