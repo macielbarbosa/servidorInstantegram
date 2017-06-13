@@ -1,8 +1,0 @@
-﻿usuario;senha;nome;sobrenome;sexo
-joao;joao;João;Abreu;M
-maria;amor;Maria;Creuza;F
-macinho;mbs;Maciel;Barbosa;M
-dapraia;mipibu;Felipe;Hygor;M
-xande;algebra;Alexandre;Xandão;M
-admin;password;admim;admim;F
-jc;1223;josé;blabla;M

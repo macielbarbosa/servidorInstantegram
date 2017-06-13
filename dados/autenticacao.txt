@@ -1,0 +1,8 @@
+﻿usuario;senha
+joao;joao
+maria;amor
+macinho;mbs
+dapraia;mipibu
+xande;algebra
+admin;password
+jc;1223;josé

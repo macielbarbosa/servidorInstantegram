@@ -18,7 +18,17 @@ import javax.swing.JTextField;
  * @author labinfo11
  */
 public class Servidor {
-    protected static Usuario getUsuario(String nomeUsuario){
+    protected static boolean isCadastrado(String login){
+        String diretorio = "dados"+File.separator+"usuarios"+File.separator+login;
+        return new File(diretorio).exists();
+    }
+    
+    protected static void cadastro(Usuario usuario){
+        String diretorio = "dados"+File.separator+"usuarios"+File.separator;
+        new File(diretorio+usuario.getLogin()).mkdir();
+    }
+    
+    /*protected static Usuario getUsuario(String nomeUsuario){
         try {
             String diretorio = "dados"+File.separator+"usuarios"+File.separator+nomeUsuario+File.separator;
             BufferedReader bf = new BufferedReader(new FileReader(diretorio+"identificacao"));
@@ -58,7 +68,16 @@ public class Servidor {
         }
         return null;
     }
-    protected static Usuario autenticacao(JTextField usuario, JPasswordField senha){
+    /*protected static Usuario autenticacao(Socket cliente){
+            try{
+                
+                    
+                }
+                catch(Exception Ex){
+                    System.out.println("Erro na autenticacao");
+                    continue;
+                }
+        
         BufferedReader bf;
         StringTokenizer st;
         String linha, key = "", loginUsuario, loginKey;
@@ -66,7 +85,7 @@ public class Servidor {
         for(int i=0; i<senha.getPassword().length;i++)
             key+=senha.getPassword()[i];
         try{
-            bf = new BufferedReader(new FileReader("dados"+File.separator+"usuarios.txt"));
+            bf = new BufferedReader(new FileReader("dados"+File.separator+"autenticacao.txt"));
             linha = bf.readLine();
             while(linha!=null){    
                 st = new StringTokenizer(linha,";");
@@ -86,7 +105,7 @@ public class Servidor {
             System.out.println(E);
         }
         return null;
-    }
+    }*/
 
     public static void main(String arg[]) throws IOException {
         ServerSocket servidor;
@@ -98,22 +117,37 @@ public class Servidor {
 
         try {
             servidor = new ServerSocket(12345);
-
+            System.out.println("Servidor aberto");
             // loop infinito
             while (true) {
                 // Aceitar uma conexao
+                System.out.println("Esperando cliente...");
                 Socket cliente = servidor.accept();
-                ObjectInputStream input = new ObjectInputStream(cliente.getInputStream());
-                try{
-                    JTextField usuario = (JTextField) input.readObject();
-                    JPasswordField senha = (JPasswordField) input.readObject();
-                    //new ObjectOutputStream(Servidor.autenticacao(usuario,senha));
+                System.out.println("Cliente conectado");
+                ObjectInputStream entrada = new ObjectInputStream(cliente.getInputStream());
+                String comando;
+                try {
+                    comando = entrada.readUTF();
+                    Usuario novoUsuario = (Usuario) entrada.readObject();
+                    
+                    if(comando.equals("cadastrar")){
+                        System.out.println("Cadastrando cliente...");
+                        if(!Servidor.isCadastrado(novoUsuario.getLogin())){
+                            new ObjectOutputStream(cliente.getOutputStream()).writeBoolean(true);
+                            Servidor.cadastro(novoUsuario);
+                            System.out.println("Cliente casdastrado");
+                        }
+                        else
+                            new ObjectOutputStream(cliente.getOutputStream()).writeBoolean(false);
+                    }
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                catch(Exception Ex){
-                    System.out.println("Fim dos livros");
-                    continue;
-                }
-                new InstanteThread(2000).start();
+                //if(comando.equals("entrar"))
+                    //Servidor.autenticacao(cliente);
+                cliente.close();
+                    
+                //new InstanteThread(2000).start();
             }
                 
                 
